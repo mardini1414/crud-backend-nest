@@ -3,7 +3,6 @@ import { StudentModule } from './student/student.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [StudentModule, AuthModule],
-  providers: [],
+  imports: [StudentModule, AuthModule]
 })
 export class AppModule {}

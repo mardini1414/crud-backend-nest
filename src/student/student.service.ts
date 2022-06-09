@@ -11,7 +11,7 @@ export class StudentService {
   }
 
   getStudentById(id: number): Promise<Students> {
-    return this.prismaService.students.findFirst({ where: { id: id } });
+    return this.prismaService.students.findFirst({ where: { id } });
   }
 
   createStudent(data: Prisma.StudentsCreateInput): Promise<Students> {
