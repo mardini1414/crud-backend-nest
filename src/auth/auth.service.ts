@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthDto } from './auth.dto';
@@ -10,15 +10,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(authDto: AuthDto): Promise<object> {
+  async validateUser(authDto: AuthDto): Promise<string | Object> {
     const user = await this.userService.findUserByEmail(authDto.email);
     if (user && user.password === authDto.password) {
       const { password, ...result } = user;
       const jwt = this.jwtService.sign(result);
-      return {
-        access_token: jwt,
-      };
+      return jwt;
     }
-    return new UnauthorizedException('email or password is wrong!');
+    throw new BadRequestException('email or password is wrong!');
   }
 }

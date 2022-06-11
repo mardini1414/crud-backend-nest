@@ -1,15 +1,43 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { Users } from '@prisma/client';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './local-auth.guard';
+import { JwtAuthGuard } from './jwt_auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/login')
-  async login(@Body() authDto: AuthDto): Promise<Users | object> {
-    return await this.authService.validateUser(authDto);
+  async login(
+    @Body() authDto: AuthDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<string | object> {
+    try {
+      const jwt = await this.authService.validateUser(authDto);
+      res.cookie('user_token', jwt, { httpOnly: true });
+      return {
+        message: { message: 'success login!' },
+      };
+    } catch (error) {
+      throw new BadRequestException('email or password is wrong!');
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/logout')
+  logout(@Res({ passthrough: true }) res: Response): object {
+    res.clearCookie('user_token');
+    return {
+      message: 'success logout',
+    };
   }
 }
