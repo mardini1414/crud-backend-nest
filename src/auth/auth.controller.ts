@@ -23,7 +23,11 @@ export class AuthController {
   ): Promise<string | object> {
     try {
       const jwt = await this.authService.validateUser(authDto);
-      res.cookie('user_token', jwt, { httpOnly: true });
+      const token = {
+        jwt,
+        refreshToken: '',
+      };
+      res.cookie('user_token', token, { httpOnly: true });
       return {
         message: { message: 'success login!' },
       };

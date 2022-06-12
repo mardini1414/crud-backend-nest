@@ -14,7 +14,7 @@ export class AuthService {
     const user = await this.userService.findUserByEmail(authDto.email);
     if (user && user.password === authDto.password) {
       const { password, ...result } = user;
-      const jwt = this.jwtService.sign(result);
+      const jwt = await this.jwtService.signAsync(result);
       return jwt;
     }
     throw new BadRequestException('email or password is wrong!');
