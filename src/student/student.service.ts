@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Students } from '@prisma/client';
 
@@ -18,12 +14,12 @@ export class StudentService {
     return this.prismaService.students.findFirst({ where: { id } });
   }
 
-  createStudent(data: Prisma.StudentsCreateInput): Promise<Students> {
+  async createStudent(data: Prisma.StudentsCreateInput): Promise<Students> {
     return this.prismaService.students.create({ data }).catch((e) => {
       if (e.meta.target.match(/nik/gm)) {
-        throw new BadRequestException('Nik already exist');
+        throw new BadRequestException(['nik already exist']);
       } else if (e.meta.target.match(/email/gm)) {
-        throw new BadRequestException('Email already exist');
+        throw new BadRequestException(['email already exist']);
       } else {
         return e;
       }
