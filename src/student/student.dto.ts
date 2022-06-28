@@ -1,4 +1,4 @@
-import { IsEmail, Length } from 'class-validator';
+import { IsEmail, Length, Validate } from 'class-validator';
 
 export class StudentDto {
   @Length(10, 10)

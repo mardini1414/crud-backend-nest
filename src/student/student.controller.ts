@@ -12,8 +12,6 @@ import { Students } from '@prisma/client';
 import { StudentService } from './student.service';
 import { StudentDto } from './student.dto';
 import { LocalStrategy } from 'src/auth/local.strategy';
-import { JwtStrategy } from 'src/auth/jwt.strategy';
-import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt_auth.guard';
 
 @Controller('student')

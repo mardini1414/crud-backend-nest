@@ -18,11 +18,11 @@ export class StudentService {
     return this.prismaService.students.findFirst({ where: { id } });
   }
 
-  createStudent(data: Prisma.StudentsCreateInput): Promise<Students> {
-    return this.prismaService.students.create({ data }).catch((e) => {
-      if (e.meta.target.match(/nik/gm)) {
+  async createStudent(data: Prisma.StudentsCreateInput): Promise<Students> {
+    return await this.prismaService.students.create({ data }).catch((e) => {
+      if (e.meta.target[0].match(/nik/gm)) {
         throw new BadRequestException('Nik already exist');
-      } else if (e.meta.target.match(/email/gm)) {
+      } else if (e.meta.target[0].match(/email/gm)) {
         throw new BadRequestException('Email already exist');
       } else {
         return e;
